@@ -2,6 +2,7 @@ package com.example.jpa.service;
 
 import java.util.List;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -28,7 +29,11 @@ public class MemberService {
 
 		validateDuplicateMember(member);
 
-		repository.save(member);
+		try {
+			repository.save(member);
+		} catch (DataIntegrityViolationException e) {
+			throw new IllegalStateException("이미 존재하는 회원입니다.");
+		}
 
 		return member.getId(); // 영속성컨텍스트에 올라간 엔티티는 반드시 ID값이 있음.
 	}

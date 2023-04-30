@@ -23,6 +23,7 @@ public class Member {
 	@Column(name = "MEMBER_ID")
 	private Long id;
 
+	@Column(unique = true)
 	private String name;
 
 	@Embedded
