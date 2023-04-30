@@ -10,12 +10,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Delivery {
 
 	@Id
@@ -31,4 +34,8 @@ public class Delivery {
 
 	@Enumerated(value = EnumType.STRING)
 	private DeliveryStatus deliveryStatus;
+
+	public Delivery(Address address) {
+		this.address = address;
+	}
 }

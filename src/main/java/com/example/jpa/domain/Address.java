@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 // 주의: immutable!!
 // setter 오픈 안함. 값 변경 필요 시 새로 생성.
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Address {
 	private String city;
 	private String street;

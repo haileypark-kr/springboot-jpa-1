@@ -43,4 +43,9 @@ public abstract class Item {
 		inverseJoinColumns = @JoinColumn(name = "FK_ITEM")
 	)
 	private List<Category> categories = new ArrayList<>();
+
+	// === 비즈니스 로직 메소드 ===
+	public void removeStock(int count) {
+		stockQuantity -= count;
+	}
 }

@@ -15,12 +15,15 @@ import javax.persistence.OneToMany;
 
 import com.example.jpa.domain.item.Item;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Category {
 
 	@Id
