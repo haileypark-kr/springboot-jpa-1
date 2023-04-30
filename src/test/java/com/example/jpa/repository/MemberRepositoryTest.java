@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.example.jpa.model.Member;
+import com.example.jpa.domain.Member;
 
 @SpringBootTest
 class MemberRepositoryTest {
