@@ -16,10 +16,6 @@ public class MemberJoinDto {
 	 * @return
 	 */
 	public Member toMember() {
-		Member member = new Member();
-		member.setName(name);
-		member.setAddress(address.toAddress());
-
-		return member;
+		return new Member(name, address.toAddress());
 	}
 }

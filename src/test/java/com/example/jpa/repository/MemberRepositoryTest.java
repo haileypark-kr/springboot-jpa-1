@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.example.jpa.domain.Address;
 import com.example.jpa.domain.Member;
 
 @SpringBootTest
@@ -19,8 +20,7 @@ class MemberRepositoryTest {
 	@Transactional // @Transactional 안붙이면 entitymanager에서 트랜잭션이 없어서 에러남.
 	public void save() throws Exception {
 		// given
-		Member member = new Member();
-		member.setName("박수현");
+		Member member = new Member("박수현", new Address("수원시", "불정로", "909090"));
 
 		// when
 		Long id = repository.save(member);

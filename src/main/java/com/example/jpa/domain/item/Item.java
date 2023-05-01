@@ -15,6 +15,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 import com.example.jpa.domain.Category;
+import com.example.jpa.exception.NotEnoughStockException;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -46,6 +47,11 @@ public abstract class Item {
 
 	// === 비즈니스 로직 메소드 ===
 	public void removeStock(int count) {
+
+		if (count > stockQuantity) {
+			throw new NotEnoughStockException("재고가 충분하지 않습니다.");
+		}
+
 		stockQuantity -= count;
 	}
 }
