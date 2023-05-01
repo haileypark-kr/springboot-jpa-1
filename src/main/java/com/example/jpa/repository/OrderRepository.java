@@ -29,6 +29,7 @@ public class OrderRepository {
 	}
 
 	public List<Order> search(OrderSearchCriteria orderSearchCriteria) {
+		// 나중에 QueryDSL로 바꾸는 코드 나옴.
 		return new ArrayList<>();
 	}
 }
