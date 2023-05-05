@@ -66,7 +66,7 @@ public class OrderService {
 		// 엔티티에 주문 취소 위임
 		order.cancel();
 
-		// repository에 업데이트 쿼리 안날린다!!!
+		// (중요) 변경 감지: 명시적으로 DB 업데이트 하지 않아도 트랜잭션 커밋 시점에 알아서 업데이트 쿼리 날아감.
 	}
 
 	// 검색

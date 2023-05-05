@@ -54,4 +54,10 @@ public abstract class Item {
 
 		stockQuantity -= count;
 	}
+
+	public void change(int price, String name, int stockQuantity) {
+		setPrice(price);
+		setName(name);
+		setStockQuantity(stockQuantity);
+	}
 }

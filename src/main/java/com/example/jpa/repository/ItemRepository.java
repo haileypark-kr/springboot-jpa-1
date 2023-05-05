@@ -16,8 +16,17 @@ public class ItemRepository {
 
 	private final EntityManager em;
 
+	/**
+	 * id 값이 없으면 save, 있으면 merge
+	 * @param item
+	 * @return
+	 */
 	public Long save(Item item) {
-		em.persist(item);
+		if (item.getId() == null) {
+			em.persist(item);
+		} else {
+			em.merge(item);
+		}
 		return item.getId();
 	}
 
