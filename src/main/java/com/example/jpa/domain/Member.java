@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotEmpty;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -24,6 +25,7 @@ public class Member {
 	@Column(name = "MEMBER_ID")
 	private Long id;
 
+	@NotEmpty
 	@Column(unique = true)
 	private String name;
 

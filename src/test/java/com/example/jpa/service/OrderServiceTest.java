@@ -12,8 +12,7 @@ import com.example.jpa.domain.Order;
 import com.example.jpa.domain.OrderStatus;
 import com.example.jpa.domain.item.Book;
 import com.example.jpa.domain.item.Item;
-import com.example.jpa.dto.AddressDto;
-import com.example.jpa.dto.MemberJoinDto;
+import com.example.jpa.dto.api.CreateMemberRequest;
 import com.example.jpa.exception.NotEnoughStockException;
 import com.example.jpa.repository.OrderRepository;
 
@@ -100,10 +99,9 @@ class OrderServiceTest {
 
 	private Long createMember() {
 		// - 멤버 생성
-		MemberJoinDto memberJoinDto = MemberJoinDto.builder()
-			.name("박수현")
-			.address(AddressDto.builder().city("수원시").street("동탄원천로").zipcode("9999").build())
-			.build();
+		CreateMemberRequest memberJoinDto = new CreateMemberRequest("박수현",
+			new CreateMemberRequest.Address("수원시", "동탄원천로", "9999"));
+
 		Long memberId = memberService.join(memberJoinDto.toMember());
 
 		return memberId;
