@@ -1,11 +1,12 @@
 package com.example.jpa.repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import com.example.jpa.domain.Order;
 import com.example.jpa.dto.OrderSearchCriteria;
@@ -28,8 +29,48 @@ public class OrderRepository {
 		return em.find(Order.class, id);
 	}
 
-	public List<Order> search(OrderSearchCriteria orderSearchCriteria) {
-		// 나중에 QueryDSL로 바꾸는 코드 나옴.
-		return new ArrayList<>();
+	/**
+	 * String concatenation으로 짠 검색 쿼리. 나중에 QueryDSL로 바꿔야 한다.
+	 * @param criteria
+	 * @return
+	 */
+	public List<Order> search(OrderSearchCriteria criteria) {
+
+		String jpql = "select o from Order o join o.member m";
+		boolean isFirstCondition = true;
+
+		//주문 상태 검색
+		if (criteria.getOrderStatus() != null) {
+			if (isFirstCondition) {
+				jpql += " where";
+				isFirstCondition = false;
+			} else {
+				jpql += " and";
+			}
+			jpql += " o.status = :status";
+		}
+
+		//회원 이름 검색
+		if (StringUtils.hasText(criteria.getMemberName())) {
+			if (isFirstCondition) {
+				jpql += " where";
+				isFirstCondition = false;
+			} else {
+				jpql += " and";
+			}
+			jpql += " m.name like :name";
+		}
+
+		TypedQuery<Order> query = em.createQuery(jpql, Order.class)
+			.setMaxResults(1000);
+
+		if (criteria.getOrderStatus() != null) {
+			query = query.setParameter("status", criteria.getOrderStatus());
+		}
+		if (StringUtils.hasText(criteria.getMemberName())) {
+			query = query.setParameter("name", criteria.getMemberName());
+		}
+
+		return query.getResultList();
 	}
 }
