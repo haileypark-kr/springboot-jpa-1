@@ -1,4 +1,4 @@
-package com.example.jpa;
+package com.example.jpa.config;
 
 import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
