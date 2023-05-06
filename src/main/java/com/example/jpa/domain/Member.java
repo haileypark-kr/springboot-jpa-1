@@ -14,8 +14,10 @@ import javax.validation.constraints.NotEmpty;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter(value = AccessLevel.PRIVATE)
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
@@ -38,5 +40,9 @@ public class Member {
 	public Member(String name, Address address) {
 		this.name = name;
 		this.address = address;
+	}
+
+	public void updateName(String name) {
+		setName(name);
 	}
 }
