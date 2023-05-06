@@ -32,6 +32,7 @@ public class InitDb {
 
 	@PostConstruct
 	public void init() {
+		// @PostConstruct 에는 @Transactional 이 잘 안먹혀서 별도 서비스로 분리.
 		initService.dbInit1();
 		initService.dbInit2();
 	}
