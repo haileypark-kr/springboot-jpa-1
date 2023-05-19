@@ -73,4 +73,16 @@ public class OrderRepository {
 
 		return query.getResultList();
 	}
+
+	/**
+	 * fetch join 사용을 위한 조회 메소드
+	 * @return
+	 */
+	public List<Order> findAllWithMemberAndDelivery() {
+		return em.createQuery(
+			"select o from Order o" +
+				" join fetch o.member m" +
+				" join fetch o.delivery d", Order.class
+		).getResultList();
+	}
 }

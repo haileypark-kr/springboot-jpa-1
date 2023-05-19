@@ -55,4 +55,17 @@ public class SimpleOrderApiController {
 		return orders.stream().map(SimpleOrderDto::new).collect(Collectors.toList());
 	}
 
+	/**
+	 * (v3) 간단한 주문 조회 API.
+	 * - fetch join 사용
+	 * 문제점
+	 * - List 반환
+	 * @return
+	 */
+	@GetMapping("/api/v3/simple-orders")
+	public List<SimpleOrderDto> ordersV3() {
+		List<Order> orders = orderRepository.findAllWithMemberAndDelivery();
+		return orders.stream().map(SimpleOrderDto::new).collect(Collectors.toList());
+	}
+
 }
