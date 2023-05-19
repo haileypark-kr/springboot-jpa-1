@@ -28,6 +28,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
     implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.7.0'
 
+    // hibernate 프록시 객체를 잭슨으로 반환하려고 할 경우 추가.
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate5'
+
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
     annotationProcessor 'org.projectlombok:lombok'
