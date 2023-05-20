@@ -1,6 +1,7 @@
 package com.example.jpa.controller.api;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.jpa.domain.Order;
 import com.example.jpa.domain.OrderItem;
 import com.example.jpa.dto.OrderSearchCriteria;
+import com.example.jpa.dto.api.OrderDto;
 import com.example.jpa.repository.OrderRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -47,5 +49,17 @@ public class OrderApiController {
 
 		return orders;
 	}
-	
+
+	/**
+	 * (v2) 주문 조회 API.
+	 * - Order를 조회하여 OrderDto에 넣는다.
+	 * 문제점
+	 * -
+	 */
+	@GetMapping("/api/v2/orders")
+	public List<OrderDto> orderV2() {
+		List<Order> orders = orderRepository.search(new OrderSearchCriteria());
+		return orders.stream().map(o -> new OrderDto(o)).collect(Collectors.toList());
+	}
+
 }
