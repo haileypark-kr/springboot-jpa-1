@@ -54,11 +54,23 @@ public class OrderApiController {
 	 * (v2) 주문 조회 API.
 	 * - Order를 조회하여 OrderDto에 넣는다.
 	 * 문제점
-	 * -
+	 * - 쿼리가 너무 많이 나간다. 총 (order 1 + ( delivery 1 + member 1 + orderItem 1 + item 2 ) * 2)회가 나감.
 	 */
 	@GetMapping("/api/v2/orders")
 	public List<OrderDto> orderV2() {
 		List<Order> orders = orderRepository.search(new OrderSearchCriteria());
+		return orders.stream().map(o -> new OrderDto(o)).collect(Collectors.toList());
+	}
+
+	/**
+	 * (v3) 주문 조회 API.
+	 * - fetch join을 사용해서 쿼리 성능 최적화를 해보자.
+	 * 문제점
+	 * -
+	 */
+	@GetMapping("/api/v3/orders")
+	public List<OrderDto> orderV3() {
+		List<Order> orders = orderRepository.findAllWithItems();
 		return orders.stream().map(o -> new OrderDto(o)).collect(Collectors.toList());
 	}
 

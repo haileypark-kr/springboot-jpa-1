@@ -85,4 +85,22 @@ public class OrderRepository {
 				" join fetch o.delivery d", Order.class
 		).getResultList();
 	}
+
+	/**
+	 * fetch join 사용을 위한 조회 메소드
+	 * @return
+	 */
+	public List<Order> findAllWithItems() {
+		return em.createQuery(
+				"select distinct o from Order o" // distict 넣어주면 order 기준으로 중복된 엔티티를 날려준다.
+					+ " join fetch o.member m" // ManyToOne
+					+ " join fetch o.delivery d" // OneToOne
+					+ " join fetch o.orderItems oi" // OneToMany => 전부 다 join이 되어서 order는 2갠데 orderItem 때문에 총 row가 4개가 되어버림.
+					+ " join fetch oi.item i",
+				Order.class
+			)
+			.setFirstResult(1)
+			.setMaxResults(100)
+			.getResultList();
+	}
 }
