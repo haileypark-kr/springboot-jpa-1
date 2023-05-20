@@ -22,6 +22,15 @@ public class SimpleOrderDto {
 	private OrderStatus orderStatus;
 	private Address deliveryAddress; // Address는 엔티티가 아닌, VO. Immutable.
 
+	public SimpleOrderDto(Long orderId, String memberName, LocalDateTime orderTime, OrderStatus orderStatus,
+		Address deliveryAddress) {
+		this.orderId = orderId;
+		this.memberName = memberName;
+		this.orderTime = orderTime;
+		this.orderStatus = orderStatus;
+		this.deliveryAddress = deliveryAddress;
+	}
+
 	/**
 	 * DTO에 엔티티를 넣는건 문제가 되지 않음.
 	 * @param order

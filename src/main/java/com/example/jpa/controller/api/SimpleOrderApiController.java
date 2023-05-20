@@ -10,6 +10,7 @@ import com.example.jpa.domain.Order;
 import com.example.jpa.dto.OrderSearchCriteria;
 import com.example.jpa.dto.api.SimpleOrderDto;
 import com.example.jpa.repository.OrderRepository;
+import com.example.jpa.repository.OrderSimpleQueryRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SimpleOrderApiController {
 	private final OrderRepository orderRepository;
+	private final OrderSimpleQueryRepository orderSimpleQueryRepository;
 
 	/**
 	 * (v1) 간단한 주문 조회 API.
@@ -31,7 +33,7 @@ public class SimpleOrderApiController {
 	 * 문제점
 	 * - Order 엔티티 그대로 반환: 연관관계에 있는 모든 엔티티를 무한루프로 가져오게 됨
 	 * - 잭슨이 LAZY로딩 때 쓰이는 hibernate 프록시 객체 변환 못함 (Hibernate5 모듈 써야 함)
-	 * - List 반환
+	 * - List 반환: 예제니까 그냥 바로 반환.
 	 */
 	@GetMapping("/api/v1/simple-orders")
 	public List<Order> ordersV1() {
@@ -46,7 +48,6 @@ public class SimpleOrderApiController {
 	 * - LAZY 로딩으로 인한 N+1 문제
 	 * 	테이블 3개 (Order, Member, Delivery)를 조회해야 하는데, 쿼리가 Order 1번, Member, Delivery 2번씩 나감 (order가 2개라)
 	 * - 최악의 경우 총 order 1번, member N번, Delivery N번 찌르게 됨.
-	 * - List 반환
 	 * @return
 	 */
 	@GetMapping("/api/v2/simple-orders")
@@ -59,13 +60,24 @@ public class SimpleOrderApiController {
 	 * (v3) 간단한 주문 조회 API.
 	 * - fetch join 사용
 	 * 문제점
-	 * - List 반환
+	 * - 엔티티를 DTO로 변환하는 로직이 추가적으로 필요,
+	 * - DTO에서 사용하지 않는 필드들도 다 조회해온다.
 	 * @return
 	 */
 	@GetMapping("/api/v3/simple-orders")
 	public List<SimpleOrderDto> ordersV3() {
 		List<Order> orders = orderRepository.findAllWithMemberAndDelivery();
 		return orders.stream().map(SimpleOrderDto::new).collect(Collectors.toList());
+	}
+
+	/**
+	 * (v4) 간단한 주문 조회 API.
+	 * - JPA에서 DTO로 바로 조회
+	 * @return
+	 */
+	@GetMapping("/api/v4/simple-orders")
+	public List<SimpleOrderDto> ordersV34() {
+		return orderSimpleQueryRepository.findOrderDtos();
 	}
 
 }
