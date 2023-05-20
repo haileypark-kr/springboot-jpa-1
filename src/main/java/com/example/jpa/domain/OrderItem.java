@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.example.jpa.domain.item.Item;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -30,6 +31,7 @@ public class OrderItem {
 	@JoinColumn(name = "FK_ITEM")
 	private Item item;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "FK_ORDER")
 	private Order order;
