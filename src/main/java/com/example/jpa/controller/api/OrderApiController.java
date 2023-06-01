@@ -11,6 +11,7 @@ import com.example.jpa.domain.Order;
 import com.example.jpa.domain.OrderItem;
 import com.example.jpa.dto.OrderSearchCriteria;
 import com.example.jpa.dto.api.OrderDto;
+import com.example.jpa.dto.api.OrderFlatDto;
 import com.example.jpa.dto.api.OrderQueryDto;
 import com.example.jpa.repository.OrderQueryRepository;
 import com.example.jpa.repository.OrderRepository;
@@ -113,6 +114,17 @@ public class OrderApiController {
 	public List<OrderQueryDto> orderV5() {
 
 		return orderQueryRepository.findOrderQueryDtos_optimization();
+
+	}
+
+	/**
+	 * (v6) 주문 조회 API.
+	 * - 컬렉션을 DTO로 조회 성능 최적화. Order와 OrderItem을 조인해서 쿼리 한 번에 flat하게 만들어 조인한다.
+	 */
+	@GetMapping("/api/v6/orders")
+	public List<OrderFlatDto> orderV6() {
+
+		return orderQueryRepository.findOrderQueryDtos_flat();
 
 	}
 
