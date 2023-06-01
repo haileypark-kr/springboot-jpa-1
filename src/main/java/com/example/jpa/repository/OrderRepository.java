@@ -90,6 +90,20 @@ public class OrderRepository {
 	 * fetch join 사용을 위한 조회 메소드
 	 * @return
 	 */
+	public List<Order> findAllWithMemberAndDeliveryPaging(int offset, int limit) {
+		return em.createQuery(
+				"select o from Order o" +
+					" join fetch o.member m" +
+					" join fetch o.delivery d", Order.class)
+			.setFirstResult(offset)
+			.setMaxResults(limit)
+			.getResultList();
+	}
+
+	/**
+	 * fetch join 사용을 위한 조회 메소드
+	 * @return
+	 */
 	public List<Order> findAllWithItems() {
 		return em.createQuery(
 				"select distinct o from Order o" // distict 넣어주면 order 기준으로 중복된 엔티티를 날려준다.

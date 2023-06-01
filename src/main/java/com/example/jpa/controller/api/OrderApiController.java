@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.jpa.domain.Order;
@@ -71,6 +72,20 @@ public class OrderApiController {
 	@GetMapping("/api/v3/orders")
 	public List<OrderDto> orderV3() {
 		List<Order> orders = orderRepository.findAllWithItems();
+		return orders.stream().map(o -> new OrderDto(o)).collect(Collectors.toList());
+	}
+
+	/**
+	 * (v3.1) 주문 조회 API.
+	 * - fetch join을 사용해서 쿼리 성능 최적화를 해보자.
+	 * 문제점
+	 * -
+	 */
+	@GetMapping("/api/v3.1/orders")
+	public List<OrderDto> orderV3_1_paging(@RequestParam(value = "offset", defaultValue = "0") int offset,
+		@RequestParam(value = "limit", defaultValue = "100") int limit) {
+
+		List<Order> orders = orderRepository.findAllWithMemberAndDeliveryPaging(offset, limit);
 		return orders.stream().map(o -> new OrderDto(o)).collect(Collectors.toList());
 	}
 

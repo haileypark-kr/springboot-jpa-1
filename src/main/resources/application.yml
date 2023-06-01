@@ -13,6 +13,7 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+        default_batch_fetch_size: 100 # LAZY 로딩 시 한 번에 조회해올 개수
 
 logging:
   level:
