@@ -99,10 +99,20 @@ public class OrderApiController {
 	 * - N+1 문제 발생
 	 */
 	@GetMapping("/api/v4/orders")
-	public List<OrderQueryDto> orderV4(@RequestParam(value = "offset", defaultValue = "0") int offset,
-		@RequestParam(value = "limit", defaultValue = "100") int limit) {
+	public List<OrderQueryDto> orderV4() {
 
 		return orderQueryRepository.findOrderQueryDtos();
+
+	}
+
+	/**
+	 * (v5) 주문 조회 API.
+	 * - 컬렉션을 DTO로 조회 성능 최적화
+	 */
+	@GetMapping("/api/v5/orders")
+	public List<OrderQueryDto> orderV5() {
+
+		return orderQueryRepository.findOrderQueryDtos_optimization();
 
 	}
 

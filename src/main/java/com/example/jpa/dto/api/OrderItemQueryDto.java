@@ -1,14 +1,20 @@
 package com.example.jpa.dto.api;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
 public class OrderItemQueryDto {
+
+	@JsonIgnore
+	Long orderId;
 	private String itemName;
 	private int orderPrice;
 	private int count;
 
-	public OrderItemQueryDto(String itemName, int orderPrice, int count) {
+	public OrderItemQueryDto(Long orderId, String itemName, int orderPrice, int count) {
+		this.orderId = orderId;
 		this.itemName = itemName;
 		this.orderPrice = orderPrice;
 		this.count = count;

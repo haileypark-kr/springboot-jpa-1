@@ -1,6 +1,8 @@
 package com.example.jpa.repository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 
@@ -45,11 +47,34 @@ public class OrderQueryRepository {
 
 		// OrderItems를 조회하는 쿼리를 별도로 짜야 함.
 		return em.createQuery(
-				"select new com.example.jpa.dto.api.OrderItemQueryDto(i.name, oi.orderPrice, oi.count)"
+				"select new com.example.jpa.dto.api.OrderItemQueryDto(oi.order.id, i.name, oi.orderPrice, oi.count)"
 					+ " from OrderItem oi"
 					+ " join oi.item i"
 					+ " where oi.order.id = :orderId", OrderItemQueryDto.class)
 			.setParameter("orderId", orderId)
 			.getResultList();
+	}
+
+	public List<OrderQueryDto> findOrderQueryDtos_optimization() {
+		List<OrderQueryDto> orders = findOrders();
+		Map<Long, List<OrderItemQueryDto>> orderItemMap = getOrderItemMap(orders);
+		orders.forEach(o -> o.setOrderItems(orderItemMap.get(o.getOrderId())));
+		return orders;
+	}
+
+	private Map<Long, List<OrderItemQueryDto>> getOrderItemMap(List<OrderQueryDto> orders) {
+		List<Long> orderIds = orders.stream().map(OrderQueryDto::getOrderId).collect(Collectors.toList());
+
+		List<OrderItemQueryDto> orderItems = em.createQuery(
+				"select new com.example.jpa.dto.api.OrderItemQueryDto(oi.order.id, i.name, oi.orderPrice, oi.count)"
+					+ " from OrderItem oi"
+					+ " join oi.item i"
+					+ " where oi.order.id in :orderIds", OrderItemQueryDto.class)
+			.setParameter("orderIds", orderIds)
+			.getResultList();
+
+		Map<Long, List<OrderItemQueryDto>> orderItemMap = orderItems.stream()
+			.collect(Collectors.groupingBy(orderItemQueryDto -> orderItemQueryDto.getOrderId()));
+		return orderItemMap;
 	}
 }
