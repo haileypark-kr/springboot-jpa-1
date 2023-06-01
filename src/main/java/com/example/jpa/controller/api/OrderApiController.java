@@ -11,6 +11,8 @@ import com.example.jpa.domain.Order;
 import com.example.jpa.domain.OrderItem;
 import com.example.jpa.dto.OrderSearchCriteria;
 import com.example.jpa.dto.api.OrderDto;
+import com.example.jpa.dto.api.OrderQueryDto;
+import com.example.jpa.repository.OrderQueryRepository;
 import com.example.jpa.repository.OrderRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,8 @@ import lombok.RequiredArgsConstructor;
 public class OrderApiController {
 
 	private final OrderRepository orderRepository;
+
+	private final OrderQueryRepository orderQueryRepository;
 
 	/**
 	 * (v1) 주문 조회 API.
@@ -77,9 +81,7 @@ public class OrderApiController {
 
 	/**
 	 * (v3.1) 주문 조회 API.
-	 * - fetch join을 사용해서 쿼리 성능 최적화를 해보자.
-	 * 문제점
-	 * -
+	 * - hibernate.default_batch_fetch_size를 사용하여 fetch join의 페이징 한계 해결.
 	 */
 	@GetMapping("/api/v3.1/orders")
 	public List<OrderDto> orderV3_1_paging(@RequestParam(value = "offset", defaultValue = "0") int offset,
@@ -87,6 +89,21 @@ public class OrderApiController {
 
 		List<Order> orders = orderRepository.findAllWithMemberAndDeliveryPaging(offset, limit);
 		return orders.stream().map(o -> new OrderDto(o)).collect(Collectors.toList());
+	}
+
+	/**
+	 * (v4) 주문 조회 API.
+	 * - 컬렉션을 DTO로 조회. OrderQueryRepository 쿼리 전용 레포지토리에서 조회하여 사용.
+	 * - Order 1번 조회하고, OrderItem은 루프를 돌면서 각각 조회 (ToMany는 row 수가 증가해서 join 할 수 없음)
+	 * 문제점
+	 * - N+1 문제 발생
+	 */
+	@GetMapping("/api/v4/orders")
+	public List<OrderQueryDto> orderV4(@RequestParam(value = "offset", defaultValue = "0") int offset,
+		@RequestParam(value = "limit", defaultValue = "100") int limit) {
+
+		return orderQueryRepository.findOrderQueryDtos();
+
 	}
 
 }
